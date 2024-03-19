@@ -1,0 +1,753 @@
+Program.Sub.ScreenSU.Start
+Gui.F_ORIGINATOR..create
+Gui.F_ORIGINATOR..caption("PO Approval Originator Maintenance")
+Gui.F_ORIGINATOR..size(9645,7380)
+Gui.F_ORIGINATOR..minx(0)
+Gui.F_ORIGINATOR..miny(0)
+Gui.F_ORIGINATOR..position(10500,4200)
+Gui.F_ORIGINATOR..event(UnLoad,f_originator_unload)
+Gui.F_ORIGINATOR..forecolor(0)
+Gui.F_ORIGINATOR..BackColor(-2147483633)
+Gui.F_ORIGINATOR..maxbutton(False)
+Gui.F_ORIGINATOR..mousepointer(0)
+Gui.F_ORIGINATOR.lblApprover.create(label,"Current Approvers",True,4125,255,1,195,1830,True,0,Arial,9,-2147483633,0)
+Gui.F_ORIGINATOR.lblApprover.defaultvalue("")
+Gui.F_ORIGINATOR.frameLimit.Create(Frame)
+Gui.F_ORIGINATOR.frameLimit.Size(9225,1545)
+Gui.F_ORIGINATOR.frameLimit.Position(210,120)
+Gui.F_ORIGINATOR.frameLimit.Caption("Amount Limit Setup")
+Gui.F_ORIGINATOR.frameLimit.FontSize(9)
+Gui.F_ORIGINATOR.lbl1.create(label,"UserID",True,1215,255,1,105,300,True,0,Arial,9,-2147483633,0)
+Gui.F_ORIGINATOR.lbl1.defaultvalue("")
+Gui.F_ORIGINATOR.lbl1.Parent("frameLimit")
+Gui.F_ORIGINATOR.txtUserCode.create(textbox,"",True,1215,315,0,135,510,True,0,Arial,9,-2147483643,1)
+Gui.F_ORIGINATOR.txtUserCode.defaultvalue("")
+Gui.F_ORIGINATOR.txtUserCode.Parent("frameLimit")
+Gui.F_ORIGINATOR.cmd_txtUserCode.create(button)
+Gui.F_ORIGINATOR.cmd_txtUserCode.caption("^")
+Gui.F_ORIGINATOR.cmd_txtUserCode.size(375,375)
+Gui.F_ORIGINATOR.cmd_txtUserCode.position(1455,480)
+Gui.F_ORIGINATOR.cmd_txtUserCode.event(Click,cmd_txtusercode_click)
+Gui.F_ORIGINATOR.cmd_txtUserCode.disableonclick(20)
+Gui.F_ORIGINATOR.cmd_txtUserCode.defaultvalue("")
+Gui.F_ORIGINATOR.cmd_txtUserCode.tabstop(True)
+Gui.F_ORIGINATOR.cmd_txtUserCode.tabindex(1)
+Gui.F_ORIGINATOR.cmd_txtUserCode.Parent("frameLimit")
+Gui.F_ORIGINATOR.lbl2.create(label,"User Name",True,1830,255,1,1920,300,True,0,Arial,9,-2147483633,0)
+Gui.F_ORIGINATOR.lbl2.defaultvalue("")
+Gui.F_ORIGINATOR.lbl2.Parent("frameLimit")
+Gui.F_ORIGINATOR.txtUserName.create(textbox,"",True,4005,315,0,1920,510,True,0,Arial,9,-2147483643,1)
+Gui.F_ORIGINATOR.txtUserName.defaultvalue("")
+Gui.F_ORIGINATOR.txtUserName.Parent("frameLimit")
+Gui.F_ORIGINATOR.lblLimit.create(label,"Limit",True,1785,255,1,6015,300,True,0,Arial,9,-2147483633,0)
+Gui.F_ORIGINATOR.lblLimit.defaultvalue("")
+Gui.F_ORIGINATOR.lblLimit.Parent("frameLimit")
+Gui.F_ORIGINATOR.txtPOLimit.Create(TextBox,"",True,1935,315,0,6045,510,True,1,"Arial",9,-2147483643,1)
+Gui.F_ORIGINATOR.txtPOLimit.Parent("frameLimit")
+Gui.F_ORIGINATOR.txtPOLimit.NumericOnly(True)
+Gui.F_ORIGINATOR.cmdSave.create(button)
+Gui.F_ORIGINATOR.cmdSave.caption("Save")
+Gui.F_ORIGINATOR.cmdSave.size(990,375)
+Gui.F_ORIGINATOR.cmdSave.position(8115,480)
+Gui.F_ORIGINATOR.cmdSave.fontsize(9)
+Gui.F_ORIGINATOR.cmdSave.event(Click,cmdsave_click)
+Gui.F_ORIGINATOR.cmdSave.defaultvalue("")
+Gui.F_ORIGINATOR.cmdSave.tabstop(True)
+Gui.F_ORIGINATOR.cmdSave.tabindex(5)
+Gui.F_ORIGINATOR.cmdSave.Parent("frameLimit")
+Gui.F_ORIGINATOR.cmd_txtPLBrws.Create(Button)
+Gui.F_ORIGINATOR.cmd_txtPLBrws.Size(375,375)
+Gui.F_ORIGINATOR.cmd_txtPLBrws.Position(8115,1080)
+Gui.F_ORIGINATOR.cmd_txtPLBrws.Parent("frameLimit")
+Gui.F_ORIGINATOR.cmd_txtPLBrws.TabStop(True)
+Gui.F_ORIGINATOR.cmd_txtPLBrws.TabIndex(1)
+Gui.F_ORIGINATOR.cmd_txtPLBrws.Caption("^")
+Gui.F_ORIGINATOR.cmd_txtPLBrws.DisableOnClick(20)
+Gui.F_ORIGINATOR.cmd_txtPLBrws.DefaultValue("")
+Gui.F_ORIGINATOR.cmd_txtPLBrws.Event(Click,cmd_txtPLBrws_Click)
+Gui.F_ORIGINATOR.txtPL.Create(TextBox,"",True,7845,315,0,135,1110,True,0,"Arial",9,-2147483643,1)
+Gui.F_ORIGINATOR.txtPL.Parent("frameLimit")
+Gui.F_ORIGINATOR.txtPL.DefaultValue("")
+Gui.F_ORIGINATOR.lblPL.Create(Label,"Product Line(s)",True,1785,255,1,135,900,True,0,"Arial",9,-2147483633,0)
+Gui.F_ORIGINATOR.lblPL.Parent("frameLimit")
+Gui.F_ORIGINATOR.lblPL.DefaultValue("")
+Gui.F_ORIGINATOR.GsGCAppr.Create(GsGridControl)
+Gui.F_ORIGINATOR.GsGCAppr.Size(9225,4635)
+Gui.F_ORIGINATOR.GsGCAppr.Position(210,2085)
+Gui.F_ORIGINATOR.GsGCAppr.Event(RowCellClick,gsfgoriginator_commandclick)
+Gui.F_ORIGINATOR.GsGCAppr.Event(CellValueChanged,GsGCAppr_CellValueChanged)
+Gui.fmPLSel..Create
+Gui.fmPLSel..Caption("Product Line Selection")
+Gui.fmPLSel..Size(5355,7575)
+Gui.fmPLSel..MinX(0)
+Gui.fmPLSel..MinY(0)
+Gui.fmPLSel..Position(0,0)
+Gui.fmPLSel..AlwaysOnTop(True)
+Gui.fmPLSel..BackColor(-2147483633)
+Gui.fmPLSel..MaxButton(False)
+Gui.fmPLSel..MousePointer(0)
+Gui.fmPLSel..Sizeable(False)
+Gui.fmPLSel..Event(UnLoad,fmPLSel_UnLoad)
+Gui.fmPLSel.GsGcPLSel.Create(GsGridControl)
+Gui.fmPLSel.GsGcPLSel.Size(5055,6555)
+Gui.fmPLSel.GsGcPLSel.Position(45,30)
+Gui.fmPLSel.GsGcPLSel.Anchor(15)
+Gui.fmPLSel.cmdOk.Create(Button)
+Gui.fmPLSel.cmdOk.Size(855,375)
+Gui.fmPLSel.cmdOk.Position(4245,6630)
+Gui.fmPLSel.cmdOk.Caption("OK")
+Gui.fmPLSel.cmdOk.FontStyle(True,False,False,False,False)
+Gui.fmPLSel.cmdOk.Event(Click,cmdOk_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+V.Global.iType.Declare
+v.Global.sApprover.Declare
+v.Global.sDDL.Declare
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+V.Local.dateBegYear.Declare
+
+'Coded by: JLH
+'Project Start Date: 5/16/2011
+'Update by: BCC
+'GSS Certified
+'Modified by: MH (7 March 2017)
+'Update by: RDC (Feb 2022)
+'Modified to create a hiearchy with Product Lines
+
+V.Local.bExist.Declare
+V.Local.sIcon.Declare
+F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+
+F.Intrinsic.String.Build("{0}\ART\gss2.ico",V.Caller.GlobalDir,v.Local.sIcon)
+'F.Intrinsic.String.Build("{0}\GAB\GAS\gss2.ico",V.Caller.PluginsDir,v.Local.sIcon)
+Gui.F_ORIGINATOR..Icon(V.Local.sIcon)
+
+f.Intrinsic.Control.CallSub(ddl_Populate)
+
+V.Global.iType.Set(2)
+
+'Check if custom table exists
+F.ODBC.Connection!conx.TableExists("GCG_6637_DOL_LMT",V.Local.bExist)
+F.Intrinsic.Control.If(V.Local.bExist,=,False)
+	F.ODBC.Connection!Conx.Execute("CREATE TABLE GCG_6637_DOL_LMT(GS_USER VARCHAR(8) NOT NULL, AMOUNT_LIMIT NUMERIC(15,2), PL_LIMIT VARCHAR(200), PRIMARY KEY(GS_USER, AMOUNT_LIMIT, PL_LIMIT));")
+F.Intrinsic.Control.EndIf
+
+F.ODBC.Connection!conx.TableExists("GCG_6637_APRVRS",V.Local.bExist)
+F.Intrinsic.Control.If(V.Local.bExist,=,False)
+	F.ODBC.Connection!Conx.Execute("CREATE TABLE GCG_6637_APRVRS(GS_USER VARCHAR(8) NOT NULL,APPROVER VARCHAR(8) NOT NULL);")
+F.Intrinsic.Control.EndIf
+
+F.ODBC.Connection!conx.TableExists("GCG_6637_APRVL",V.Local.bExist)
+F.Intrinsic.Control.If(V.Local.bExist,=,False)
+	F.ODBC.Connection!Conx.Execute("CREATE TABLE GCG_6637_APRVL(PURCHASE_ORDER VARCHAR(7) NOT NULL, DATE_ORDER DATE NOT NULL, VENDOR VARCHAR(6) NOT NULL, AMOUNT NUMERIC(15,2) NOT NULL, DATE_DUE DATE NOT NULL, ORIGINATOR VARCHAR(8) NOT NULL, APPROVER VARCHAR(8), APPROVED_DATE DATETIME, PRIMARY KEY(PURCHASE_ORDER, DATE_ORDER));")
+F.Intrinsic.Control.EndIf
+
+f.Intrinsic.Control.CallSub(Load_Data)
+
+'Lock text boxes so users can't type in them
+'Text boxes can only be filled by using the browsers
+Gui.F_ORIGINATOR.txtUserCode.Locked(True)
+Gui.F_ORIGINATOR.txtUserName.Locked(True)
+Gui.F_ORIGINATOR.cmd_txtUserCode.SetFocus
+'Gui.F_ORIGINATOR.ddlType.AddItem("Quote",0)
+'Gui.F_ORIGINATOR.ddlType.AddItem("Purchase Order",1)
+'Gui.F_ORIGINATOR.ddlType.AddItem("Sales Order",2)
+Gui.F_ORIGINATOR..Show
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6637_ORIGINATOR_MAINT.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(F_originator_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Main.End
+
+Program.Sub.f_originator_unload.Start
+F.Intrinsic.Control.SetErrorHandler("f_originator_unload_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+F.Intrinsic.Control.If(V.DataTable.dtApvAmt.Exists,=,True)
+	F.Data.DataTable.Close("dtApvAmt")
+F.Intrinsic.Control.EndIf
+
+F.ODBC.Connection!conx.Close
+F.Intrinsic.Control.End
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("f_originator_unload_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6637_ORIGINATOR_MAINT.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+Program.Sub.f_originator_unload.End
+
+Program.Sub.cmd_txtusercode_click.Start
+F.Intrinsic.Control.SetErrorHandler("cmd_txtusercode_click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.sRet.Declare(String)
+V.Local.sUsers.Declare(String)
+V.Local.sName.Declare(String)
+V.Local.sEmail.Declare(String)
+V.Local.stext.Declare(String)
+V.Local.iCount.Declare(String)
+V.Local.stitles.Declare(String)
+V.Local.swidths.Declare(String)
+V.Local.sQuery.Declare(String)
+V.Local.iType.Declare(Long)
+
+Function.Intrinsic.UI.CommonBrowser(10,"",V.Local.sRet)
+F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+	F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	Gui.F_ORIGINATOR.txtUserCode.Text(V.Local.sRet(1).Trim)
+	F.Intrinsic.String.Build("Current Approvers for {0}",V.Local.sRet(1).Trim,V.Local.stitles)
+	Gui.F_ORIGINATOR.lblApprover.Caption(V.Local.stitles)
+	F.Intrinsic.String.Build("{0} {1}",V.Local.sRet(3).Trim,V.Local.sRet(4).Trim,V.Local.sName)
+	Gui.F_ORIGINATOR.txtUserName.Text(V.Local.sName)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmd_txtusercode_click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6637_ORIGINATOR_MAINT.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(F_originator_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.cmd_txtusercode_click.End
+
+Program.Sub.cmdsave_click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdsave_click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.sQuery.Declare(String)
+V.Local.bNo.Declare(String)
+V.Local.iType.Declare(Long)
+V.Local.sUser.Declare(String)
+v.Local.sPL.Declare
+v.Local.sPLSQL.Declare
+v.Local.sRet.Declare
+v.Local.i.Declare
+
+'V.Local.iType.Set(V.Screen.F_ORIGINATOR!ddlType.ListIndex)
+'
+'F.Intrinsic.control.If(V.Local.iType,<>,-1)
+'	F.Intrinsic.Math.Add(V.Local.iType,1,V.Local.iType)
+	'Check to see if PO Limit is numeric
+	F.Intrinsic.Math.IsNumeric(V.Screen.F_ORIGINATOR!txtPOLimit.Text,V.Local.bNo)
+	
+	f.Intrinsic.String.Split(v.Screen.F_ORIGINATOR!txtPL.Text,",",v.Local.sPL)
+	
+	f.Intrinsic.Control.For(v.Local.i,0,v.Local.sPL.UBound,1)
+		f.Intrinsic.Control.If(v.Local.i,=,0)
+			f.Intrinsic.String.Build("PL_LIMIT like '%{0}%'",v.Local.sPL(v.Local.i),v.Local.sPLSQL)
+		f.Intrinsic.Control.Else
+			f.Intrinsic.String.Build("{0} or PL_LIMIT like '%{1}%'",v.Local.sPLSQL,v.Local.sPL(v.Local.i),v.Local.sPLSQL)
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Next(v.Local.i)
+	
+	f.Intrinsic.String.Build("Select * from GCG_6637_DOL_LMT where GS_USER <> '{0}' and AMOUNT_LIMIT = '{1}' and ({2})",V.Screen.F_ORIGINATOR!txtUserCode.Text,V.Screen.F_ORIGINATOR!txtPOLimit.Text,v.Local.sPLSQL,v.Local.sQuery)
+	f.ODBC.Connection!conx.ExecuteandReturn(v.Local.sQuery,v.Local.sRet)
+
+	'Check to see if a user is selected and a PO Limit has been entered
+	F.Intrinsic.Control.If(V.Screen.F_ORIGINATOR!txtUserCode.Text,=,"")
+		F.Intrinsic.UI.Msgbox("Please Select a User.","PO Approval Originator Maintenance")
+		F.Intrinsic.Control.ExitSub
+	F.Intrinsic.Control.ElseIf(V.Screen.F_ORIGINATOR!txtPOLimit.Text,=,"")
+		F.Intrinsic.UI.Msgbox("Please Set the Amount Limit.","PO Approval Originator Maintenance")
+		F.Intrinsic.Control.ExitSub
+	'If PO Limit isn't numeric, give error message and exit sub
+	F.Intrinsic.Control.ElseIf(V.Local.bNo,=,False)
+		F.Intrinsic.UI.Msgbox("Invalid Dollar Limit","PO Approval Originator Maintenance")
+		Gui.F_ORIGINATOR.txtPOLimit.Text("")
+		F.Intrinsic.Control.ExitSub
+	F.Intrinsic.Control.ElseIf(v.Screen.F_ORIGINATOR!txtPL.Text,=,"")
+		F.Intrinsic.UI.Msgbox("Please enter Product Line(s).","PO Approval Originator Maintenance")
+		F.Intrinsic.Control.ExitSub
+'	f.Intrinsic.Control.ElseIf(v.Ambient.ExecuteAndReturnEOF.not)
+'		F.Intrinsic.UI.Msgbox("Another user has already been assigned the Product Line(s) at this amount.","PO Approval Originator Maintenance")
+'		F.Intrinsic.Control.ExitSub
+	F.Intrinsic.Control.Else
+		V.Local.sUser.Set(V.Screen.F_ORIGINATOR!txtUserCode.Text)
+		'Open record set, see if user already has a Dollar limit
+		'If EOF=True, add new record set
+		
+		F.Intrinsic.String.Build("Select * from GCG_6637_DOL_LMT where GS_USER = '{0}' and PL_LIMIT = '{1}' and APPROVER = '{2}'",V.Local.sUser.Trim,V.Screen.F_ORIGINATOR!txtPL.Text,v.Global.sApprover,V.Local.sQuery)
+		F.ODBC.Connection!conx.OpenLocalRecordsetRW("rst",V.Local.sQuery)
+	
+		'Add to GCG_6637_DOL_LMT
+		F.Intrinsic.Control.If(V.ODBC.conx!rst.EOF,=,True)
+			F.ODBC.conx!rst.AddNew
+			F.ODBC.conx!rst.Set!GS_USER(V.Local.sUser.Trim)
+			F.ODBC.conx!rst.Set!PL_LIMIT(V.Screen.F_ORIGINATOR!txtPL.Text)
+		'If EOF=False, update Dollar Limit for that user
+		F.Intrinsic.Control.EndIf
+			F.ODBC.conx!rst.Set!AMOUNT_LIMIT(V.Screen.F_ORIGINATOR!txtPOLimit.Text)
+			F.ODBC.conx!rst.Update
+		F.ODBC.conx!rst.Close
+		
+		F.Intrinsic.UI.Msgbox("Amount limit is saved")
+	F.Intrinsic.Control.EndIf
+	
+	v.Global.sApprover.Set("")
+	
+	f.Intrinsic.Control.CallSub(Clear_Data)
+	f.Intrinsic.Control.CallSub(Load_Data)
+
+'F.Intrinsic.Control.Else
+'	F.Intrinsic.UI.Msgbox("Please select a type")
+'	F.Intrinsic.Control.ExitSub
+'F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdsave_click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6637_ORIGINATOR_MAINT.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(F_originator_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.cmdsave_click.End
+
+Program.Sub.Load_Data.Start
+F.Intrinsic.Control.SetErrorHandler("Load_Data_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+f.Intrinsic.Control.If(v.DataTable.dtApvAmt.Exists)
+	f.Data.DataView.Close("dtApvAmt","dvApvAmt")
+	f.Data.DataTable.Close("dtApvAmt")
+f.Intrinsic.Control.EndIf
+
+f.Data.DataTable.CreateFromSQL("dtApvAmt","conx","Select GS_USER, rtrim(PL_LIMIT) as PL_LIMIT, AMOUNT_LIMIT, APPROVER from GCG_6637_DOL_LMT order by AMOUNT_LIMIT ASC",true)
+f.Data.DataTable.AddColumn("dtApvAmt","NAME_USER","string")
+f.Data.DataTable.AddColumn("dtApvAmt","DELETE","string")
+
+f.Data.Dictionary.CreateFromSQL("NAME","conx","Select rtrim(PR_USER_ID) as GS_USER, rtrim(NAME) as NAME from V_EMPLOYEE_MSTR")
+f.Data.Dictionary.SetDefaultReturn("NAME","")
+f.Data.DataTable.FillFromDictionary("dtApvAmt","NAME","GS_USER","NAME_USER")
+f.Data.Dictionary.Close("NAME")
+
+f.Data.DataView.Create("dtApvAmt","dvApvAmt")
+
+f.Intrinsic.Control.CallSub(gvApvAmt_Format)
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Load_Data_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6637_ORIGINATOR_MAINT.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(F_originator_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Load_Data.End
+
+Program.Sub.gsfgoriginator_commandclick.Start
+F.Intrinsic.Control.SetErrorHandler("gsfgoriginator_commandclick_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.fLimit.Declare
+V.Local.sFilter.Declare
+V.Local.sText.Declare(String)
+V.Local.sName.Declare
+V.Local.sQuery.Declare(String)
+V.Local.sRet.Declare
+V.Local.sSelect.Declare
+V.Local.sTitles.Declare
+V.Local.sUser.Declare
+V.Local.iType.Declare(Long)
+V.Local.iWidths.Declare
+
+'V.local.iType.Set(V.Screen.F_ORIGINATOR!ddlType.ListIndex)
+'F.Intrinsic.Math.Add(V.Local.iType,1,V.Local.iType)
+V.Local.sUser.Set(V.Screen.F_ORIGINATOR!txtUserCode.Text)
+
+F.Intrinsic.Control.If(V.Args.Column,=,"DELETE")
+
+	f.Intrinsic.UI.Msgbox("Are you sure you want to delete this row?","WARNING!",4,v.Local.sRet)
+
+	f.Intrinsic.Control.If(v.Local.sRet,=,v.Ambient.MsgBoxYes)
+		'Remove the approver
+		F.Intrinsic.String.Build("DELETE from GCG_6637_DOL_LMT where GS_USER = '{0}' and PL_LIMIT = '{1}' and AMOUNT_LIMIT = '{2}'",v.DataTable.dtApvAmt(v.Args.RowIndex).GS_USER!FieldValTrim,v.DataTable.dtApvAmt(v.Args.RowIndex).PL_LIMIT!FieldValTrim,v.DataTable.dtApvAmt(v.Args.RowIndex).AMOUNT_LIMIT!FieldVal,V.Local.sQuery)
+		F.ODBC.Connection!conx.Execute(V.Local.sQuery)
+		f.Intrinsic.Control.CallSub(Load_Data)
+		
+	f.Intrinsic.Control.EndIf
+	
+F.Intrinsic.Control.Else
+
+	gui.F_ORIGINATOR.txtUserCode.Text(v.DataTable.dtApvAmt(v.Args.RowIndex).GS_USER!FieldValTrim)
+	gui.F_ORIGINATOR.txtUserName.Text(v.DataTable.dtApvAmt(v.Args.RowIndex).NAME_USER!FieldValTrim)
+	gui.F_ORIGINATOR.txtPOLimit.Text(v.DataTable.dtApvAmt(v.Args.RowIndex).AMOUNT_LIMIT!FieldVal)
+	gui.F_ORIGINATOR.txtPL.Text(v.DataTable.dtApvAmt(v.Args.RowIndex).PL_LIMIT!FieldValTrim)
+	v.Global.sApprover.Set(v.DataTable.dtApvAmt(v.Args.RowIndex).APPROVER!FieldValTrim)
+	
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("gsfgoriginator_commandclick_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6637_ORIGINATOR_MAINT.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(F_originator_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.gsfgoriginator_commandclick.End
+
+Program.Sub.fmPLSel_UnLoad.Start
+'UNLOAD THE PL SELECTION SCREEN
+f.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+gui.fmPLSel..Visible(false)
+
+gui.F_ORIGINATOR..Enabled(true)
+
+f.Intrinsic.Control.Catch
+	f.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	f.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End 
+f.Intrinsic.Control.EndTry
+Program.Sub.fmPLSel_UnLoad.End
+
+Program.Sub.cmdOk_Click.Start
+'BUILD STRING FOR ALL SELECTED PL AND INSERT INTO MAINTENANCE FIELD
+f.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+v.Local.i.Declare
+v.Local.sPL.Declare
+
+f.Intrinsic.Control.For(v.Local.i,0,v.DataTable.dtPL.RowCount--,1)
+	f.Intrinsic.Control.If(v.DataTable.dtPL(v.Local.i).SELECT!FieldVal,=,True)
+		f.Intrinsic.Control.If(v.Local.sPL,=,"")
+			v.Local.sPL.Set(v.DataTable.dtPL(v.Local.i).PROD_LINE!FieldValTrim)
+		f.Intrinsic.Control.Else
+			f.Intrinsic.String.Build("{0},{1}",v.Local.sPL,v.DataTable.dtPL(v.Local.i).PROD_LINE!FieldValTrim,v.Local.sPL)
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.Next(v.Local.i)
+
+gui.F_ORIGINATOR.txtPL.Text(v.Local.sPL)
+
+gui.fmPLSel..Visible(false)
+
+gui.F_ORIGINATOR..Enabled(true)
+
+f.Intrinsic.Control.Catch
+	f.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	f.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End 
+f.Intrinsic.Control.EndTry
+Program.Sub.cmdOk_Click.End
+
+Program.Sub.cmd_txtPLBrws_Click.Start
+'CREATE AND POPULATE TABLE TO SELECT PRODUCT LINES TO ADD TO MAINTENANCE SCREEN
+f.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+v.Local.sSQL.Declare
+
+F.Intrinsic.Control.If(v.DataTable.dtPL.Exists)
+
+	f.Data.DataView.Close("dtPL","dvPL")
+	f.Data.DataTable.Close("dtPL")
+
+F.Intrinsic.Control.EndIf
+
+f.Data.DataTable.CreateFromSQL("dtPL","conx","Select PROD_LINE, rtrim(PL_NAME) as PL_NAME from V_PL_MASTER",true)
+f.Data.DataTable.AddColumn("dtPL","SELECT","boolean")
+f.Data.DataTable.SetValue("dtPL",-1,"SELECT",False)
+
+f.Data.DataView.Create("dtPL","dvPL")
+
+f.Intrinsic.Control.CallSub(gvPL_Format)
+
+gui.F_ORIGINATOR..Enabled(false)
+
+gui.fmPLSel..Visible(true)
+
+f.Intrinsic.Control.Catch
+	f.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	f.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End 
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_txtPLBrws_Click.End
+
+Program.Sub.gvPL_Format.Start
+'FORMAT THE PRODUCT LINE SELECTION TABLE
+f.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+v.Local.i.Declare
+
+gui.fmPLSel.GsGcPLSel.AddGridviewFromDataview("gvPL","dtPL","dvPL")
+
+gui.fmPLSel.GsGcPLSel.SuspendLayout
+gui.fmPLSel.GsGcPLSel.Visible(False)
+
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","Caption","")
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","HeaderFontBold","TRUE")
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","HeaderHAlignment","CENTER")
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","CellHAlignment","CENTER")
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","MinWidth",)
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","MaxWidth",)
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","DisplayCustomNumeric","$###,##0.00")
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","ReadOnly","TRUE")
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","AllowEdit","FALSE")
+'gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","","VisibleIndex",v.Local.i)
+'f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","Caption","Sel")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","HeaderFontBold","TRUE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","HeaderHAlignment","CENTER")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","CellHAlignment","CENTER")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","MinWidth",45)
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","MaxWidth",45)
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","ReadOnly","FALSE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","AllowEdit","TRUE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","SELECT","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","Caption","PL")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","HeaderFontBold","TRUE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","HeaderHAlignment","CENTER")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","CellHAlignment","CENTER")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","MinWidth",45)
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","MaxWidth",45)
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","ReadOnly","TRUE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","AllowEdit","FALSE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PROD_LINE","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PL_NAME","Caption","Name")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PL_NAME","HeaderFontBold","TRUE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PL_NAME","HeaderHAlignment","LEFT")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PL_NAME","CellHAlignment","LEFT")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PL_NAME","MinWidth",215)
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PL_NAME","ReadOnly","TRUE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PL_NAME","AllowEdit","FALSE")
+gui.fmPLSel.GsGcPLSel.SetColumnProperty("gvPL","PL_NAME","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.fmPLSel.GsGcPLSel.MainView("gvPL")
+
+gui.fmPLSel.GsGcPLSel.ResumeLayout
+gui.fmPLSel.GsGcPLSel.Visible(True)
+
+f.Intrinsic.Control.Catch
+	f.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	f.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End 
+f.Intrinsic.Control.EndTry
+Program.Sub.gvPL_Format.End
+
+Program.Sub.gvApvAmt_Format.Start
+'FORMAT THE MAINTENANCE TABLE
+f.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+v.Local.i.Declare
+
+gui.F_ORIGINATOR.GsGCAppr.AddGridviewFromDataview("gvApvAmt","dtApvAmt","dvApvAmt")
+
+gui.F_ORIGINATOR.GsGCAppr.ClearGrouping("gvApvAmt")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","GroupIndex",0)
+
+gui.F_ORIGINATOR.GsGCAppr.SuspendLayout
+gui.F_ORIGINATOR.GsGCAppr.Visible(False)
+
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","Caption","")
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","HeaderFontBold","TRUE")
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","HeaderHAlignment","CENTER")
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","CellHAlignment","CENTER")
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","MinWidth",)
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","MaxWidth",)
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","DisplayCustomNumeric","$###,##0.00")
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","ReadOnly","TRUE")
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","AllowEdit","FALSE")
+'gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","","VisibleIndex",v.Local.i)
+'f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","Caption","User")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","HeaderFontBold","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","HeaderHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","CellHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","MinWidth",85)
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","ReadOnly","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","AllowEdit","FALSE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","GS_USER","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","NAME_USER","Caption","Name")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","NAME_USER","HeaderFontBold","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","NAME_USER","HeaderHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","NAME_USER","CellHAlignment","LEFT")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","NAME_USER","MinWidth",125)
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","NAME_USER","ReadOnly","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","NAME_USER","AllowEdit","FALSE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","NAME_USER","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","PL_LIMIT","Caption","PL(s)")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","PL_LIMIT","HeaderFontBold","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","PL_LIMIT","HeaderHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","PL_LIMIT","CellHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","PL_LIMIT","MinWidth",85)
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","PL_LIMIT","ReadOnly","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","PL_LIMIT","AllowEdit","FALSE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","PL_LIMIT","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","Caption","Amount")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","HeaderFontBold","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","HeaderHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","CellHAlignment","FAR")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","MinWidth",85)
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","DisplayCustomNumeric","$###,##0.00")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","ReadOnly","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","AllowEdit","FALSE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","AMOUNT_LIMIT","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","APPROVER","Caption","Approver")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","APPROVER","HeaderFontBold","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","APPROVER","HeaderHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","APPROVER","CellHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","APPROVER","MinWidth",85)
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","APPROVER","ReadOnly","FALSE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","APPROVER","AllowEdit","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.ColumnEdit("gvApvAmt","APPROVER","Dropdownlist",v.Global.sDDL)
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","APPROVER","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","Caption","Del")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","HeaderFontBold","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","HeaderHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","CellHAlignment","CENTER")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","MinWidth",35)
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","MaxWidth",35)
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","ReadOnly","TRUE")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","AllowEdit","FALSE")
+gui.F_ORIGINATOR.GsGCAppr.ColumnEdit("gvApvAmt","DELETE","EditorButton","DEL")
+gui.F_ORIGINATOR.GsGCAppr.SetColumnProperty("gvApvAmt","DELETE","VisibleIndex",v.Local.i)
+f.Intrinsic.Math.Add(v.local.i,1,v.Local.i)
+
+gui.F_ORIGINATOR.GsGCAppr.MainView("gvApvAmt")
+
+gui.F_ORIGINATOR.GsGCAppr.ResumeLayout
+gui.F_ORIGINATOR.GsGCAppr.Visible(True)
+
+f.Intrinsic.Control.Catch
+	f.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	f.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End 
+f.Intrinsic.Control.EndTry
+Program.Sub.gvApvAmt_Format.End
+
+Program.Sub.Clear_Data.Start
+'CLEAR DATA FROM THE MAINTENANCE FIELDS
+f.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+gui.F_ORIGINATOR.txtUserCode.Text("")
+gui.F_ORIGINATOR.txtUserName.Text("")
+gui.F_ORIGINATOR.txtPOLimit.Text("0")
+gui.F_ORIGINATOR.txtPL.Text("")
+
+f.Intrinsic.Control.Catch
+	f.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	f.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End 
+f.Intrinsic.Control.EndTry
+Program.Sub.Clear_Data.End
+
+Program.Sub.GsGCAppr_CellValueChanged.Start
+'UPDATES APPROVER ON THE PL/AMOUNT LIMIT LINE
+f.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+v.Local.sQuery.Declare
+v.Local.sRet.Declare
+
+f.Intrinsic.Control.If(v.Args.Column,=,"APPROVER")
+
+	f.Intrinsic.String.Build("Select * from GCG_6637_APRVRS where GS_USER = '{0}' and APPROVER = '{1}'",v.DataTable.dtApvAmt(v.Args.RowIndex).GS_USER!FieldValTrim,v.DataTable.dtApvAmt(v.Args.RowIndex).APPROVER!FieldValTrim,v.Local.sQuery)
+	f.ODBC.Connection!conx.ExecuteandReturn(v.Local.sQuery,v.Local.sRet)
+	
+	f.Intrinsic.Control.If(v.Ambient.ExecuteAndReturnEOF.not)
+		
+	f.Intrinsic.Control.Else
+	
+		f.Intrinsic.String.Build("INSERT INTO GCG_6637_APRVRS (GS_USER, APPROVER) VALUES ('{0}', '{1}');",v.DataTable.dtApvAmt(v.Args.RowIndex).GS_USER!FieldValTrim,v.DataTable.dtApvAmt(v.Args.RowIndex).APPROVER!FieldValTrim,v.Local.sQuery)
+		f.ODBC.Connection!conx.Execute(v.Local.sQuery)
+		
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.String.Build("Select * from GCG_6637_DOL_LMT where GS_USER = '{0}' and AMOUNT_LIMIT = '{1}' and PL_LIMIT = '{2}'",v.DataTable.dtApvAmt(v.Args.RowIndex).GS_USER!FieldValTrim,v.DataTable.dtApvAmt(v.Args.RowIndex).AMOUNT_LIMIT!FieldVal,v.DataTable.dtApvAmt(v.Args.RowIndex).PL_LIMIT!FieldValTrim,v.Local.sQuery)
+	f.ODBC.Connection!conx.ExecuteandReturn(v.Local.sQuery,v.Local.sRet)
+	
+	f.Intrinsic.Control.If(v.Ambient.ExecuteAndReturnEOF.not)
+	
+		f.Intrinsic.String.Build("UPDATE GCG_6637_DOL_LMT set APPROVER = '{0}' where GS_USER = '{1}' and AMOUNT_LIMIT = '{2}' and PL_LIMIT = '{3}'",v.DataTable.dtApvAmt(v.Args.RowIndex).APPROVER!FieldValTrim,v.DataTable.dtApvAmt(v.Args.RowIndex).GS_USER!FieldValTrim,v.DataTable.dtApvAmt(v.Args.RowIndex).AMOUNT_LIMIT!FieldVal,v.DataTable.dtApvAmt(v.Args.RowIndex).PL_LIMIT!FieldValTrim,v.Local.sQuery)
+		f.ODBC.Connection!conx.Execute(v.Local.sQuery)
+		
+	f.Intrinsic.Control.EndIf
+
+f.Intrinsic.Control.EndIf
+
+f.Intrinsic.Control.Catch
+	f.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	f.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End 
+f.Intrinsic.Control.EndTry
+Program.Sub.GsGCAppr_CellValueChanged.End
+
+Program.Sub.ddl_Populate.Start
+'POPULATES DROP DOWN LIST FOR APPROVERS
+f.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+f.ODBC.Connection!conx.OpenLocalRecordsetRO("DDL","select rtrim(PR_USER_ID) as USER_ID from V_EMPLOYEE_MSTR where PR_USER_ID <> ''")
+
+f.Intrinsic.Control.DoUntil(v.ODBC.conx!DDL.EOF,=,true)
+
+	f.Intrinsic.String.Build("{0}*!*{1}",v.Global.sDDL,v.ODBC.conx!DDL.FieldValTrim!USER_ID,v.Global.sDDL)
+	
+	f.ODBC.conx!DDL.MoveNext
+	
+f.Intrinsic.Control.Loop
+
+f.ODBC.conx!DDL.Close
+
+f.Intrinsic.Control.Catch
+	f.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	f.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End 
+f.Intrinsic.Control.EndTry
+Program.Sub.ddl_Populate.End
+
+Program.Sub.Comments.Start
+${$0$}$Approver-Originator Setup for ARC 3531$}$MHERTANTO$}$6/28/2019 2:10:30 PM$}$False
+${$5$}$2.0.0.0$}$2
+${$6$}$tdjohan$}$20200904145332691$}$8rAQhOSvlohpQhMDm1j544LwmwXnRbkhjDhFkKDofa+Z/NMGAIkuFT6NARmWIrLMy5DXPqMNyn0=
+Program.Sub.Comments.End
