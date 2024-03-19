@@ -1,0 +1,325 @@
+Program.Sub.ScreenSU.Start
+Gui.F_POStatus..Create
+Gui.F_POStatus..Caption("PO Approval Status")
+Gui.F_POStatus..Size(15360,8775)
+Gui.F_POStatus..MinX(0)
+Gui.F_POStatus..MinY(0)
+Gui.F_POStatus..Position(0,0)
+Gui.F_POStatus..BackColor(-2147483633)
+Gui.F_POStatus..MousePointer(0)
+Gui.F_POStatus..Event(UnLoad,Unload)
+Gui.F_POStatus..Sizeable(False)
+Gui.F_POStatus.tab1.Create(Tab)
+Gui.F_POStatus.tab1.Size(14985,6870)
+Gui.F_POStatus.tab1.Position(90,1275)
+Gui.F_POStatus.tab1.FontSize(9)
+Gui.F_POStatus.tab1.Tabs(3)
+Gui.F_POStatus.tab1.SetTab(0)
+Gui.F_POStatus.tab1.Caption("Approved")
+Gui.F_POStatus.tab1.SetTab(1)
+Gui.F_POStatus.tab1.Caption("Pending")
+Gui.F_POStatus.tab1.SetTab(2)
+Gui.F_POStatus.tab1.Caption("Rejected")
+Gui.F_POStatus.GsGCApproved.Create(GsGridControl)
+Gui.F_POStatus.GsGCApproved.Size(14730,6330)
+Gui.F_POStatus.GsGCApproved.Position(75,60)
+Gui.F_POStatus.GsGCApproved.Parent("tab1",0)
+Gui.F_POStatus.GsGCApproved.Event(RowCellClick,GcGCApproved_Clicked)
+Gui.F_POStatus.GsGCPending.Create(GsGridControl)
+Gui.F_POStatus.GsGCPending.Size(14730,6330)
+Gui.F_POStatus.GsGCPending.Position(60,60)
+Gui.F_POStatus.GsGCPending.Parent("tab1",1)
+Gui.F_POStatus.GsGCPending.Event(RowCellClick,GsGCPen_Clicked)
+Gui.F_POStatus.GsGCReject.Create(GsGridControl)
+Gui.F_POStatus.GsGCReject.Size(14730,6330)
+Gui.F_POStatus.GsGCReject.Position(60,60)
+Gui.F_POStatus.GsGCReject.Parent("tab1",2)
+Gui.F_POStatus.GsGCReject.Event(RowCellClick,GsGCReject_Clicked)
+Gui.F_POStatus.picGSSLogo.Create(PictureBox)
+Gui.F_POStatus.picGSSLogo.Size(4125,960)
+Gui.F_POStatus.picGSSLogo.Position(90,60)
+Gui.F_POStatus.frame1.Create(Frame)
+Gui.F_POStatus.frame1.Size(4275,1155)
+Gui.F_POStatus.frame1.Position(10755,105)
+Gui.F_POStatus.lbl1.Create(Label,"Cut Off Date",True,1935,255,0,105,315,True,0,"Arial",9,-2147483633,0)
+Gui.F_POStatus.lbl1.Parent("frame1")
+Gui.F_POStatus.dtp1.Create(DatePicker)
+Gui.F_POStatus.dtp1.Size(1935,285)
+Gui.F_POStatus.dtp1.Position(135,585)
+Gui.F_POStatus.dtp1.Parent("frame1")
+Gui.F_POStatus.cmdRefresh.Create(Button)
+Gui.F_POStatus.cmdRefresh.Size(1800,660)
+Gui.F_POStatus.cmdRefresh.Position(2325,255)
+Gui.F_POStatus.cmdRefresh.Caption("REFRESH")
+Gui.F_POStatus.cmdRefresh.FontSize(9)
+Gui.F_POStatus.cmdRefresh.Event(Click,RefreshScreen)
+Gui.F_POStatus.cmdRefresh.Parent("frame1")
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+V.Local.dCutoff.Declare(Date)
+
+V.Local.sGSSLogo.Declare
+V.Local.sIconPath.Declare
+
+F.ODBC.Connection!Conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass,180)
+
+F.Intrinsic.String.Concat(V.Caller.GlobalDir,"\ART\gss2.ico",V.Local.sIconPath)
+F.Intrinsic.String.Concat(V.Caller.GlobalDir,"\ART\GAB_GSS_Logo_Green_Dash.png",V.Local.sGSSLogo)
+'F.Intrinsic.String.Concat(V.Caller.PluginsDir,"\GAB\GAS\gss2.ico",V.Local.sIconPath)
+'F.Intrinsic.String.Concat(V.Caller.PluginsDir,"\GAB\GAS\GAB_GSS_Logo_Green_Dash.png",V.Local.sGSSLogo)
+Gui.F_POStatus.picGSSLogo.Picture(V.Local.sGSSLogo)
+Gui.F_POStatus..Icon(V.Local.sIconPath)
+
+F.Intrinsic.Date.DateAdd("D",-30,V.Ambient.Date,V.Local.dCutoff)
+Gui.F_POStatus.dtp1.Value(V.Local.dCutoff)
+
+F.Intrinsic.Control.CallSub(refreshscreen)
+Gui.F_POStatus.tab1.SetTab(0)
+
+Gui.F_POStatus.GsGCApproved.Anchor(15)
+Gui.F_POStatus.GsGCPending.Anchor(15)
+Gui.F_POStatus.GsGCReject.Anchor(15)
+Gui.F_POStatus.tab1.Anchor(15)
+Gui.F_POStatus.frame1.Anchor(9)
+
+Gui.F_POStatus..Show
+Program.Sub.Main.End
+
+Program.Sub.RefreshScreen.Start
+V.Local.dCutoff.Declare(Date)
+
+V.Local.i1.Declare
+
+V.Local.sFilter.Declare
+V.Local.sRet.Declare
+V.Local.sSQL.Declare
+V.Local.sUser.Declare
+
+V.Local.dCutoff.Set(V.Screen.F_POStatus!dtp1.Value)
+
+Gui.F_POStatus.tab1.Visible(False)
+
+F.Intrinsic.Control.If(V.DataTable.dtApp.Exists,=,True)
+	F.Data.DataTable.Close("dtApp")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.UI.InvokeWaitDialog("Loading PO Approval Data","PO Approval Status [6637]")
+F.Intrinsic.String.Build("select purchase_order as PO, rtrim(vendor) as Vendor, ' ' as Name, date_order as PODate, date_due as DueDate, amount as Amount, Originator as Originator, Approver as Approver, approved_date as ApprovedDate from GCG_6637_APRVL where (approver <> '' and approver is not null and approver <> '*REVISE*' and approver <> '*REJECT*') and date_order >= '{0}' order by PODate",V.Local.dCutoff.PervasiveDate,V.Local.sSQL)
+F.Data.DataTable.CreateFromSQL("dtApp","Conx",V.Local.sSQL,True)
+F.Data.DataTable.AddColumn("dtApp","Print","String")
+F.Data.Dictionary.CreateFromSQL("dicVen","conx","select rtrim(vendor), name_vendor from v_vendor_master where vendor <> ''")
+F.Data.Dictionary.SetDefaultReturn("dicVen","")
+'F.Data.DataTable.CreateFromSQL("dtVen","Conx","select vendor, name_vendor from v_vendor_master where vendor <> ''")
+F.Intrinsic.UI.ChangeWaitStatus("Loading Approved POs")
+F.Data.DataTable.FillFromDictionary("dtApp","dicVen","Vendor","Name")
+'F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtApp.RowCount--,1)
+'	F.Intrinsic.String.Build("vendor = '{0}'",V.DataTable.dtApp(V.Local.i1).Vendor!FieldValTrim,V.Local.sFilter)
+'	F.Data.DataTable.Select("dtVen",V.Local.sFilter,V.Local.sRet)
+'	F.Data.DataTable.SetValue("dtApp",V.Local.i1,"Name",V.DataTable.dtVen(V.Local.sRet).name_vendor!FieldValTrim)
+'F.Intrinsic.Control.Next(V.Local.i1)
+Gui.F_POStatus.GsGCApproved.AddGridviewFromDatatable("gvApp","dtApp")
+Gui.F_POStatus.GsGCApproved.MainView("gvApp")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Vendor","Visible",False)
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Name","Caption","Vendor")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PODate","Caption","PO Date")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","DueDate","Caption","Due Date")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Approver","Caption","Approved By")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","ApprovedDate","Caption","Approved Date")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Print","ShowCaption",False)
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Print","AllowEdit",False)
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PO","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Name","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PODate","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","DueDate","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Amount","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Originator","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Approver","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","ApprovedDate","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PO","CellHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PODate","CellHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","DueDate","CellHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Originator","CellHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Approver","CellHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","ApprovedDate","CellHAlignment","Center")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PODate","DisplayCustomDatetime","d")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","DueDate","DisplayCustomDatetime","d")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","ApprovedDate","DisplayCustomDatetime","d")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","Amount","DisplayCustomNumeric","##,###,##0.00")
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PO","CellForeColor",V.Color.Blue)
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PO","CellFontUnderline",True)
+Gui.F_POStatus.GsGCApproved.SetColumnProperty("gvApp","PO","AllowEdit",False)
+Gui.F_POStatus.GsGCApproved.ColumnEdit("gvApp","Print","EditorButton","Print")
+
+F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtApp.RowCount--,2)
+	Gui.F_POStatus.GsGCApproved.SetRowAppearance("gvApp",V.Local.i1,"backcolor","aliceblue")
+F.Intrinsic.Control.Next(V.Local.i1)
+
+F.Intrinsic.Control.If(V.DataTable.dtPen.Exists,=,True)
+	F.Data.DataTable.Close("dtPen")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.UI.ChangeWaitStatus("Loading Pending POs")
+F.Data.DataTable.CreateFromSQL("dtPen","Conx","select purchase_order as PO, rtrim(vendor) as Vendor, ' ' as Name, date_order as PODate, date_due as DueDate, amount as Amount, Originator as Originator from GCG_6637_APRVL where (approver = '' or approver is null or approver = '*REVISE*') order by PODate",True)
+F.Data.DataTable.FillFromDictionary("dtPen","dicVen","Vendor","Name")
+'F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtPen.RowCount--,1)
+'	F.Intrinsic.String.Build("vendor = '{0}'",V.DataTable.dtPen(V.Local.i1).Vendor!FieldValTrim,V.Local.sFilter)
+'	F.Data.DataTable.Select("dtVen",V.Local.sFilter,V.Local.sRet)
+'	F.Data.DataTable.SetValue("dtPen",V.Local.i1,"Name",V.DataTable.dtVen(V.Local.sRet).name_vendor!FieldValTrim)
+'F.Intrinsic.Control.Next(V.Local.i1)
+Gui.F_POStatus.GsGCPending.AddGridviewFromDatatable("gvPen","dtPen")
+Gui.F_POStatus.GsGCPending.MainView("gvPen")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","Vendor","Visible",False)
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","Name","Caption","Vendor")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PODate","Caption","PO Date")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","DueDate","Caption","Due Date")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PO","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","Name","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PODate","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","DueDate","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","Amount","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","Originator","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PO","CellHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PODate","CellHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","DueDate","CellHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","Originator","CellHAlignment","Center")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PODate","DisplayCustomDatetime","d")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","DueDate","DisplayCustomDatetime","d")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","Amount","DisplayCustomNumeric","##,###,##0.00")
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PO","CellForeColor",V.Color.Blue)
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PO","CellFontUnderline",True)
+Gui.F_POStatus.GsGCPending.SetColumnProperty("gvPen","PO","AllowEdit",False)
+
+F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtPen.RowCount--,2)
+	Gui.F_POStatus.GsGCPending.SetRowAppearance("gvPen",V.Local.i1,"backcolor","aliceblue")
+F.Intrinsic.Control.Next(V.Local.i1)
+
+F.Intrinsic.Control.If(V.DataTable.dtReject.Exists,=,True)
+	F.Data.DataTable.Close("dtReject")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.UI.ChangeWaitStatus("Loading Rejected POs")
+'V.Local.sUser.Set(V.Caller.User)
+V.Local.sSQL.Set("select purchase_order as PO, rtrim(vendor) as Vendor, ' ' as Name, date_order as PODate, date_due as DueDate, amount as Amount, Originator as Originator from GCG_6637_APRVL where approver = '*REJECT*' order by PODate")
+F.Data.DataTable.CreateFromSQL("dtReject","Conx",V.Local.sSQL,True)
+F.Data.DataTable.FillFromDictionary("dtReject","dicVen","Vendor","Name")
+'F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtReject.RowCount--,1)
+'	F.Intrinsic.String.Build("vendor = '{0}'",V.DataTable.dtReject(V.Local.i1).Vendor!FieldValTrim,V.Local.sFilter)
+'	F.Data.DataTable.Select("dtVen",V.Local.sFilter,V.Local.sRet)
+'	F.Data.DataTable.SetValue("dtReject",V.Local.i1,"Name",V.DataTable.dtVen(V.Local.sRet).name_vendor!FieldValTrim)
+'F.Intrinsic.Control.Next(V.Local.i1)
+Gui.F_POStatus.GsGCReject.AddGridviewFromDatatable("gvReject","dtReject")
+Gui.F_POStatus.GsGCReject.MainView("gvReject")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","Vendor","Visible",False)
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","Name","Caption","Vendor")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PODate","Caption","PO Date")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","DueDate","Caption","Due Date")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PO","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","Name","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PODate","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","DueDate","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","Amount","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","Originator","HeaderHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PO","CellHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PODate","CellHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","DueDate","CellHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","Originator","CellHAlignment","Center")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PODate","DisplayCustomDatetime","d")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","DueDate","DisplayCustomDatetime","d")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","Amount","DisplayCustomNumeric","##,###,##0.00")
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PO","CellForeColor",V.Color.Blue)
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PO","CellFontUnderline",True)
+Gui.F_POStatus.GsGCReject.SetColumnProperty("gvReject","PO","AllowEdit",False)
+
+F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtReject.RowCount--,2)
+	Gui.F_POStatus.GsGCReject.SetRowAppearance("gvReject",V.Local.i1,"backcolor","aliceblue")
+F.Intrinsic.Control.Next(V.Local.i1)
+F.Data.Dictionary.Close("dicVen")
+F.Intrinsic.UI.CloseWaitDialog
+Gui.F_POStatus.tab1.Visible(True)
+Program.Sub.RefreshScreen.End
+
+Program.Sub.Unload.Start
+F.Intrinsic.Control.If(V.DataTable.dtApp.Exists,=,True)
+	F.Data.DataTable.Close("dtApp")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.If(V.DataTable.dtPen.Exists,=,True)
+	F.Data.DataTable.Close("dtPen")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.If(V.DataTable.dtReject.Exists,=,True)
+	F.Data.DataTable.Close("dtReject")
+F.Intrinsic.Control.EndIf
+
+F.ODBC.Connection!Conx.Close
+F.Intrinsic.Control.End
+
+Program.Sub.Unload.End
+
+Program.Sub.GcGCApproved_Clicked.Start
+V.Local.sParam.Declare
+V.Local.sSQL.Declare
+V.Local.sUser.Declare
+
+F.Intrinsic.Control.If(V.Args.Column,=,"Print")
+	F.Intrinsic.String.Build("select approver from GCG_6637_APRVL where purchase_order = '{0}'",V.DataTable.dtApp(V.Args.RowIndex).PO!FieldValTrim,V.Local.sSQL)
+	F.ODBC.Connection!Conx.OpenLocalRecordsetRO("rst",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.Conx!rst.FieldValTrim!approver,<>,"")
+		F.Intrinsic.String.Concat(V.DataTable.dtApp(V.Args.RowIndex).PO!FieldValTrim,"!*!P!*! !*!N!*!Y",V.Local.sParam)
+		F.Global.General.CallWrapperSync(915000,V.Local.sParam)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.UI.Msgbox("Approval is required to print this PO","PO Approval Status")
+	F.Intrinsic.Control.EndIf
+	F.ODBC.Conx!rst.Close
+F.Intrinsic.Control.ElseIf(V.Args.Column,=,"PO")
+	V.Local.sUser.Set(V.Caller.User)
+	F.Intrinsic.Control.If(V.Local.sUser.Trim,=,V.DataTable.dtApp(V.Args.RowIndex).Originator!FieldValTrim)
+		F.Intrinsic.String.Concat("O!*!",V.DataTable.dtApp(V.Args.RowIndex).PO!FieldValTrim,"!*!",V.Local.sParam)
+		F.Global.General.CallWrapperSync(175200,V.Local.sParam)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.String.Concat("V!*!",V.DataTable.dtApp(V.Args.RowIndex).PO!FieldValTrim,"!*!",V.Local.sParam)
+		F.Global.General.CallWrapperSync(175200,V.Local.sParam)
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+Program.Sub.GcGCApproved_Clicked.End
+
+Program.Sub.GsGCPen_Clicked.Start
+V.Local.sParam.Declare
+V.Local.sUser.Declare
+
+F.Intrinsic.Control.If(V.Args.Column,=,"PO")
+	V.Local.sUser.Set(V.Caller.User)
+	F.Intrinsic.Control.If(V.Local.sUser.Trim,=,V.DataTable.dtPen(V.Args.RowIndex).Originator!FieldValTrim)
+		F.Intrinsic.String.Concat("O!*!",V.DataTable.dtPen(V.Args.RowIndex).PO!FieldValTrim,"!*!",V.Local.sParam)
+		F.Global.General.CallWrapperSync(175200,V.Local.sParam)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.String.Concat("V!*!",V.DataTable.dtPen(V.Args.RowIndex).PO!FieldValTrim,"!*!",V.Local.sParam)
+		F.Global.General.CallWrapperSync(175200,V.Local.sParam)
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+Program.Sub.GsGCPen_Clicked.End
+
+Program.Sub.GsGCReject_Clicked.Start
+V.Local.sParam.Declare
+V.Local.sUser.Declare
+
+F.Intrinsic.Control.If(V.Args.Column,=,"PO")
+	V.Local.sUser.Set(V.Caller.User)
+	F.Intrinsic.Control.If(V.Local.sUser.Trim,=,V.DataTable.dtReject(V.Args.RowIndex).Originator!FieldValTrim)
+		F.Intrinsic.String.Concat("O!*!",V.DataTable.dtReject(V.Args.RowIndex).PO!FieldValTrim,"!*!",V.Local.sParam)
+		F.Global.General.CallWrapperSync(175200,V.Local.sParam)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.String.Concat("V!*!",V.DataTable.dtReject(V.Args.RowIndex).PO!FieldValTrim,"!*!",V.Local.sParam)
+		F.Global.General.CallWrapperSync(175200,V.Local.sParam)
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+Program.Sub.GsGCReject_Clicked.End
+
+Program.Sub.Comments.Start
+${$0$}$PO Approval Status Check$}$MHERTANTO$}$20/6/2017 10:59:40 PM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This program displays the status of PO requiring approval. The user can identify which PO has been approved and which PO has not been approved and user can print PO directly from here.
+Program.Sub.Comments.End
